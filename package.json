@@ -4,8 +4,8 @@
   "description": "Boilerplate for node project on typescript",
   "main": "index.js",
   "engines": {
-    "node": "~10.14.0",
-    "npm": "~6.10.0"
+    "node": ">=8.0.0",
+    "npm": ">=6.0.0"
   },
   "scripts": {
     "build": "tsc",
@@ -18,7 +18,7 @@
     "start": "node src/main",
     "start:dev": "concurrently --kill-others \"tsc -w\" \"set DEBUG=* && nodemon --inspect src/main.js\"",
     "commit": "commit-prompt --no-verify",
-    "precommit": "lint-staged && npm run lint",
+    "precommit": "lint-staged",
     "test": "jest --detectOpenHandles",
     "test:unit": "jest --detectOpenHandles --testPathPattern \"src/.+spec.tsx?$\"",
     "test:e2e": "jest --detectOpenHandles --testPathPattern \"__tests__/.+.tsx?\"",
@@ -43,6 +43,7 @@
   "homepage": "https://github.com/trucknet-io/trucknet-boilerplate-typescript-node#readme",
   "devDependencies": {
     "@types/jest": "^24.0.0",
+    "@types/serialport": "^7.0.4",
     "concurrently": "^4.1.0",
     "jest": "^24.0.0",
     "nodemon": "^1.19.0",
@@ -59,6 +60,7 @@
   "dependencies": {
     "@types/node": "~10.14.0",
     "module-alias": "^2.2.0",
+    "serialport": "^7.1.5",
     "typescript": "^3.6.0"
   }
 }

@@ -9,7 +9,8 @@
     "module": "commonjs",
     "jsx": "react",
     "target": "es2017",
-    "lib": ["es2017", "dom"],
+    "esModuleInterop": true,
+    "lib": ["es2017"],
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"]

@@ -4,6 +4,7 @@
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
+    "declaration": true,
     "sourceMap": true,
     "strict": true,
     "module": "commonjs",

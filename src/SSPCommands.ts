@@ -1,32 +1,31 @@
 import serialport from "serialport";
 import { promisify } from "util";
-import { Commands } from "./commands";
+import commands from "./commands";
+import { SspType } from "./types";
 import { sleep } from "./utils";
 
-class SSPCommands<CommandsList extends Commands> {
-  public commandsList: CommandsList;
+class SSPCommands<Type extends SspType> {
+  public commandsList: typeof commands[Type];
   private execStack: number[][];
   private socket: serialport;
   private sspId: number;
   private sequence: number;
   private sequenceNumber: number;
 
-  constructor(
-    socket: serialport,
-    commandsList: CommandsList,
-    sspId: number,
-    sequence: number,
-  ) {
+  constructor(socket: serialport, type: Type, sspId: number, sequence: number) {
     this.socket = socket;
     this.sspId = sspId;
     this.sequence = this.sequenceNumber = sequence;
-    this.commandsList = commandsList;
+    this.commandsList = commands[type];
     this.execStack = [];
   }
 
-  public async exec(commandName?: keyof CommandsList) {
+  public async exec(
+    commandName?: keyof typeof commands[Type],
+    ...args: number[]
+  ) {
     if (commandName) {
-      this.stack(commandName);
+      this.stack(commandName, ...args);
     }
 
     const execLine = this.execStack.shift();
@@ -41,15 +40,7 @@ class SSPCommands<CommandsList extends Commands> {
     void this.exec();
   }
 
-  private getSequence() {
-    return (
-      this.sspId |
-      (this.sequence =
-        this.sequence === this.sequenceNumber ? 0x00 : this.sequenceNumber)
-    );
-  }
-
-  private crc16(commandLine: number[]) {
+  public crc16(commandLine: number[]) {
     const seed = 0xffff;
     const poly = 0x8005;
     let crc = seed;
@@ -68,7 +59,15 @@ class SSPCommands<CommandsList extends Commands> {
     return [crc & 0xff, (crc >> 8) & 0xff];
   }
 
-  private stack(commandName: keyof CommandsList, ...args: number[]) {
+  private getSequence() {
+    return (
+      this.sspId |
+      (this.sequence =
+        this.sequence === this.sequenceNumber ? 0x00 : this.sequenceNumber)
+    );
+  }
+
+  private stack(commandName: keyof typeof commands[Type], ...args: number[]) {
     if (!this.commandsList.hasOwnProperty(commandName)) {
       throw new Error(`Unknown command ${commandName}`);
     }

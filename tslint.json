@@ -1,6 +1,15 @@
 {
   "extends": "tslint-config-trucknet-io",
   "rules": {
-    "no-bitwise": false
+    "no-bitwise": false,
+    "import-name": [
+      true,
+      null,
+      {
+        "serialport": "Serialport"
+      },
+      null,
+      {}
+    ]
   }
 }

@@ -1,10 +1,10 @@
 import serialport from "serialport";
 import { promisify } from "util";
 import commands from "./commands";
-import { SspType } from "./types";
+import { SSPType } from "./types";
 import { sleep } from "./utils";
 
-class SSPCommands<Type extends SspType> {
+class SSPCommands<Type extends SSPType> {
   public commandsList: typeof commands[Type];
   private execStack: number[][];
   private socket: serialport;

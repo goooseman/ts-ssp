@@ -4,9 +4,9 @@ export type Required<T> = T extends object
   ? { [P in keyof T]-?: NonNullable<T[P]> }
   : T;
 
-export type SspType = "nv10usb" | "nv9usb";
-export type SspParity = "none" | "even" | "mark" | "odd" | "space";
-export type SspOptions = {
+export type SSPType = "nv10usb" | "nv9usb";
+export type SSPParity = "none" | "even" | "mark" | "odd" | "space";
+export type SSPOptions = {
   /**
    * 'npx @serialport/list' to get a list
    */
@@ -30,7 +30,7 @@ export type SspOptions = {
   /**
    * Default is none
    */
-  parity?: SspParity;
+  parity?: SSPParity;
   /**
    * Default is 0
    */

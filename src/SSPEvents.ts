@@ -1,9 +1,9 @@
 import { EventEmitter } from "events";
 import SSPCommands from "./SSPCommands";
-import { SspType } from "./types";
+import { SSPType } from "./types";
 
 // tslint:disable-next-line: cyclomatic-complexity
-const getEventFromEventCode = <Type extends SspType>(
+const getEventFromEventCode = <Type extends SSPType>(
   eventCode: number,
   eventData: number,
   commands: SSPCommands<Type>,
@@ -176,7 +176,7 @@ export const getErrorMessageFromErrorCode = (
   }
 };
 
-export const emitEventFromBuffer = <Type extends SspType>(
+export const emitEventFromBuffer = <Type extends SSPType>(
   buffer: Buffer,
   emit: EventEmitter["emit"],
   commands: SSPCommands<Type>,

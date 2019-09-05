@@ -3,16 +3,16 @@ import Serialport from "serialport";
 import { promisify } from "util";
 import SSPCommands from "./SSPCommands";
 import { emitEventFromBuffer } from "./SSPEvents";
-import { Required, SspOptions, SspType } from "./types";
+import { Required, SSPOptions, SSPType } from "./types";
 import { sleep } from "./utils";
 
-class SSP<Type extends SspType = "nv10usb"> extends EventEmitter {
-  private options: Required<SspOptions>;
+class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
+  private options: Required<SSPOptions>;
   private commands?: SSPCommands<Type>;
   private socket?: Serialport;
   private pollTimeout?: NodeJS.Timeout;
   private type: Type;
-  constructor(type: Type, options: SspOptions) {
+  constructor(type: Type, options: SSPOptions) {
     super();
     this.type = type;
     this.options = {

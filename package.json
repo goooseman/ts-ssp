@@ -1,20 +1,25 @@
 {
-  "name": "trucknet-boilerplate-typescript-node",
+  "name": "ts-node",
   "version": "0.0.1",
-  "description": "Boilerplate for node project on typescript",
-  "main": "index.js",
+  "description": "NodeJS library to work with coin and bill acceptors under SSP protocol. Written in Typescript.",
+  "main": "src/index.js",
   "engines": {
     "node": ">=8.0.0",
     "npm": ">=6.0.0"
   },
+  "files": [
+    "src/**/*.js",
+    "src/**/*.d.ts"
+  ],
   "scripts": {
     "build": "tsc",
     "build:clean": "npm run clean && npm run build",
+    "prepack": "tsc --declaration",
     "watch": "tsc -w",
     "lint": "npm run lint:tsc && npm run lint:tslint",
     "lint:tsc": "tsc -p tsconfig.json --noEmit",
     "lint:tslint": "tslint -c tslint.json -p tsconfig.json --fix",
-    "lint:prettier": "prettier --write \"{src,test}/**/*.ts*\"",
+    "lint:prettier": "prettier --write \"{src,__tests__}/**/*.ts*\"",
     "start": "node src/main",
     "start:dev": "concurrently --kill-others \"tsc -w\" \"set DEBUG=* && nodemon --inspect src/main.js\"",
     "commit": "commit-prompt --no-verify",
@@ -24,25 +29,33 @@
     "test:e2e": "jest --detectOpenHandles --testPathPattern \"__tests__/.+.tsx?\"",
     "test:ci": "jest --detectOpenHandles --coverage",
     "clean": "rimraf '{src,__tests__}/**/*.js?(x)?(.map)'",
-    "release": "./extra/deployment/release.sh"
+    "release": "./extra/deployment/release.sh",
+    "postrelease": "npm publish"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/trucknet-io/trucknet-boilerplate-typescript-node.git"
+    "url": "git+https://github.com/goooseman/ts-ssp.git"
   },
   "keywords": [
-    "trucknet",
-    "typescript",
-    "boilerplate"
+    "Smiley Secure Protocol",
+    "Innovative Technologies",
+    "SSP",
+    "NV10",
+    "NV9",
+    "NV10Plus",
+    "NV10+",
+    "serialport",
+    "cash acceptor"
   ],
   "author": "goooseman",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/trucknet-io/trucknet-boilerplate-typescript-node/issues"
+    "url": "https://github.com/goooseman/ts-ssp/issues"
   },
-  "homepage": "https://github.com/trucknet-io/trucknet-boilerplate-typescript-node#readme",
+  "homepage": "https://github.com/goooseman/ts-ssp",
   "devDependencies": {
     "@types/jest": "^24.0.0",
+    "@types/node": "^10.14.17",
     "@types/serialport": "^7.0.4",
     "concurrently": "^4.1.0",
     "jest": "^24.0.0",
@@ -52,15 +65,10 @@
     "trucknet-commit": "^1.5.0",
     "ts-jest": "^24.0.0",
     "tslint": "^5.19.0",
-    "tslint-config-trucknet-io": "^1.8.0"
-  },
-  "_moduleAliases": {
-    "@src": "src"
+    "tslint-config-trucknet-io": "^1.8.0",
+    "typescript": "^3.6.2"
   },
   "dependencies": {
-    "@types/node": "~10.14.0",
-    "module-alias": "^2.2.0",
-    "serialport": "^7.1.5",
-    "typescript": "^3.6.0"
+    "serialport": "^7.1.5"
   }
 }

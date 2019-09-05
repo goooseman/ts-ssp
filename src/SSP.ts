@@ -7,8 +7,8 @@ import { Required, SSPOptions, SSPType } from "./types";
 import { sleep } from "./utils";
 
 class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
+  public commands?: SSPCommands<Type>;
   private options: Required<SSPOptions>;
-  private commands?: SSPCommands<Type>;
   private socket?: Serialport;
   private pollTimeout?: NodeJS.Timeout;
   private type: Type;

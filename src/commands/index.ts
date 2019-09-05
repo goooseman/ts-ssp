@@ -1,3 +1,4 @@
+import { SspType } from "@src/types";
 import NV10USBCommands from "./NV10USBCommands";
 import NV9USBCommands from "./NV9USBCommands";
 
@@ -6,8 +7,15 @@ export interface Command {
   sequence?: number;
 }
 
-export interface Commands {
+export interface DeviceCommands {
   [commandName: string]: Command;
 }
 
-export { NV9USBCommands, NV10USBCommands };
+export type Commands = { [deviceName in SspType]: DeviceCommands };
+
+const commands: Commands = {
+  nv10usb: NV10USBCommands,
+  nv9usb: NV9USBCommands,
+};
+
+export default commands;

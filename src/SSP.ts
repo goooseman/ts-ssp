@@ -26,6 +26,10 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
     };
   }
 
+  public isInitialized(): boolean {
+    return (this.socket && this.socket.isOpen) || false;
+  }
+
   public async enable() {
     if (!this.commands) {
       throw new Error("Commands are not initialised");
@@ -69,7 +73,7 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
 
   public async init() {
     if (this.socket) {
-      await promisify(this.socket.close)();
+      throw new Error("Already initialised");
     }
     this.socket = new Serialport(this.options.device, {
       baudRate: this.options.baudRate,

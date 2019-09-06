@@ -1,9 +1,5 @@
 import { OpenOptions } from "serialport";
 
-export type Required<T> = T extends object
-  ? { [P in keyof T]-?: NonNullable<T[P]> }
-  : T;
-
 export type SSPType = "nv10usb" | "nv9usb";
 export type SSPParity = "none" | "even" | "mark" | "odd" | "space";
 export type SSPOptions = {

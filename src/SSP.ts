@@ -3,7 +3,7 @@ import Serialport from "serialport";
 import { promisify } from "util";
 import SSPCommands from "./SSPCommands";
 import { emitEventFromBuffer } from "./SSPEvents";
-import { Required, SSPOptions, SSPType } from "./types";
+import { SSPOptions, SSPType } from "./types";
 import { sleep } from "./utils";
 
 class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {

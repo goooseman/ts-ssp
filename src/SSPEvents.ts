@@ -170,6 +170,7 @@ export const getErrorMessageFromErrorCode = (
     case 0xfa:
       return "Key not set";
     case 0xf0:
+      // OK
       return undefined;
     default:
       return `Unknown error code ${errorCode}`;

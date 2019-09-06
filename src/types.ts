@@ -1,7 +1,7 @@
 import { OpenOptions } from "serialport";
 
 export type SSPType = "nv10usb" | "nv9usb";
-export type SSPParity = "none" | "even" | "mark" | "odd" | "space";
+
 export type SSPOptions = {
   /**
    * 'npx @serialport/list' to get a list
@@ -26,7 +26,7 @@ export type SSPOptions = {
   /**
    * Default is none
    */
-  parity?: SSPParity;
+  parity?: OpenOptions["parity"];
   /**
    * Default is 0
    */

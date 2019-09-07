@@ -122,7 +122,7 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
     await this.commands.exec("sync");
     await this.commands.exec("enable_higher_protocol");
     await this.commands.exec("set_channel_inhibits", low, 0x00);
-    this.emit("ready");
+    this.emit("start");
   }
 
   public async close() {

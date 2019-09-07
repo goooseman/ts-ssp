@@ -29,7 +29,7 @@ You are always welcome to add implementation to another device. Theoritically, y
 
 ### Events
 
-- `ready` - emits after device is initialized
+- `start` - emits after device is initialized
 - `close` - emits after device is disconnected
 - `error` - emits when any error occured
 - other events supported by SSP protocol like `slave_reset`, `read_note`, `credit_note`, `note_rejecting`, `note_stacking`, `disabled`

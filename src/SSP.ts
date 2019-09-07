@@ -26,8 +26,12 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
     };
   }
 
-  public isInitialized(): boolean {
+  public isOpened(): boolean {
     return (this.socket && this.socket.isOpen) || false;
+  }
+
+  public isEnabled(): boolean {
+    return Boolean(this.pollTimeout) || false;
   }
 
   public async enable() {
@@ -71,9 +75,9 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
     this.socket.close();
   }
 
-  public async init() {
+  public async open() {
     if (this.socket) {
-      throw new Error("Already initialised");
+      throw new Error("Connection is already opened");
     }
     this.socket = new Serialport(this.options.device, {
       baudRate: this.options.baudRate,
@@ -119,6 +123,18 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
     await this.commands.exec("enable_higher_protocol");
     await this.commands.exec("set_channel_inhibits", low, 0x00);
     this.emit("ready");
+  }
+
+  public async close() {
+    if (!this.socket) {
+      throw new Error("Connection is not opened");
+    }
+    if (this.isEnabled) {
+      await this.disable();
+    }
+    await promisify(this.socket.close)();
+    this.socket = undefined;
+    this.emit("close");
   }
 }
 

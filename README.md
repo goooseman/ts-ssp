@@ -17,12 +17,15 @@ You are always welcome to add implementation to another device. Theoritically, y
 
 ### Methods
 
-- `init: () => Promise<void>` - initializes connection to device
+- `open: () => Promise<void>` - initializes connection to device
+- `close: () => Promise<void>` - stops connection to device
 - `enable: () => Promise<void>` - enables money receiving
 - `disable: () => Promise<void>` - disabled money receiving
 - `commands.exec: (commandName?: string, ...commandArguments: number[]) => Promise<void>` - Adds a command to command stack and execute it. If no commandName is passed, just executes the command stack
 - `on: (eventName: string, eventHandler: (...args: number[])) => void` - Attaches event handler
 - `off: (eventName: string, eventHandler: (...args: number[])) => void` - Dettaches event handler
+- `isOpened: () => boolean` - is connection to device opened
+- `isEnabled: () => boolean` - is money receiving enabled
 
 ### Events
 

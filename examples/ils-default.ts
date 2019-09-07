@@ -15,7 +15,7 @@ const start = async () => {
     currencies: [0, 1, 1, 1], //currencies types acceptable. Here all but 20ILS
   });
 
-  await ssp.init();
+  await ssp.open();
   ssp.on("ready", async () => {
     await ssp.enable();
   });

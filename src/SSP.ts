@@ -97,19 +97,7 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
     this.socket.on("error", (err: Error) => {
       this.emit("error", err);
     });
-    this.socket.on("data", (buffer: Buffer) => {
-      if (!this.commands) {
-        return;
-      }
-      let ix = 0;
-      do {
-        const len = buffer[2] + 5;
-        const buf = Buffer.alloc(len);
-        buffer.copy(buf, 0, ix, ix + len);
-        emitEventFromBuffer(buf, this.emit, this.commands);
-        ix += len;
-      } while (ix < buffer.length);
-    });
+    this.socket.on("data", this.handleData);
     await promisify(this.socket.open)();
     const low = this.options.currencies.reduce((p, c, i) => {
       return c === 1 ? p + Math.pow(2, i) : p;
@@ -136,6 +124,24 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
     this.socket = undefined;
     this.emit("close");
   }
+
+  /**
+   * For additional info refer to `Transport Layer` section of SSP_Manual.pdf
+   */
+  private handleData = (buffer: Buffer) => {
+    if (!this.commands) {
+      this.emit("error", new Error("Commands are not initialized"));
+      return;
+    }
+    let ix = 0;
+    do {
+      const len = buffer[2] + 5;
+      const buf = Buffer.alloc(len);
+      buffer.copy(buf, 0, ix, ix + len);
+      emitEventFromBuffer(buf, this.emit, this.commands);
+      ix += len;
+    } while (ix < buffer.length);
+  };
 }
 
 export default SSP;

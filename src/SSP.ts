@@ -129,7 +129,7 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
     if (!this.socket) {
       throw new Error("Connection is not opened");
     }
-    if (this.isEnabled) {
+    if (this.isEnabled()) {
       await this.disable();
     }
     await promisify(this.socket.close)();

@@ -1,4 +1,4 @@
 import SSP from "./SSP";
-import { SSPOptions, SSPParity, SSPType } from "./types";
+import { SSPOptions, SSPType } from "./types";
 
-export { SSP, SSPOptions, SSPParity, SSPType };
+export { SSP, SSPOptions, SSPType };

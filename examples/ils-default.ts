@@ -3,29 +3,32 @@ import { SSP } from "../src";
 
 // tslint:disable: no-console
 const start = async () => {
-  const notes = {
+  const notes: {
+    [key: number]: string;
+  } = {
     1: "20ILS",
     2: "50ILS",
     3: "100ILS",
     4: "200ILS",
-  };
+  } as const;
 
   const ssp = new SSP("nv10usb", {
-    device: "/dev/ttyACM0", //device address, use 'npx @serialport/list' to get a list
+    device: "/dev/tty.SLAB_USBtoUART", //device address, use 'npx @serialport/list' to get a list
     currencies: [0, 1, 1, 1], //currencies types acceptable. Here all but 20ILS
   });
 
+  console.log("before open");
   await ssp.open();
-  ssp.on("ready", async () => {
-    await ssp.enable();
-  });
+  console.log("opened");
+  await ssp.enable();
+  console.log("enabled");
 
   ssp.on("read_note", async (note: number) => {
     if (note > 0) {
       console.log("Ohhh, some cash!", notes[note]);
       if (note === 3) {
         // suddenly we decided that we don't need 100 ILS
-        await ssp.commands.exec("reject_banknote");
+        await ssp.exec("reject_banknote");
       }
     }
   });

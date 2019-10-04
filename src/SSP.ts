@@ -6,7 +6,7 @@ import { SSPOptions, SSPType } from "./types";
 import { sleep } from "./utils";
 
 class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
-  public commands?: SSPCommands<Type>;
+  private commands?: SSPCommands<Type>;
   private options: Required<SSPOptions>;
   private socket?: Serialport;
   private pollTimeout?: NodeJS.Timeout;
@@ -23,6 +23,16 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
       sequence: 0x80,
       ...options,
     };
+  }
+
+  public exec(
+    commandName: keyof SSPCommands<Type>["commandsList"],
+    ...args: number[]
+  ): Promise<void> {
+    if (!this.commands) {
+      throw new Error("Comamnds are not avalible");
+    }
+    return this.commands.exec(commandName, ...args);
   }
 
   public isOpened(): boolean {

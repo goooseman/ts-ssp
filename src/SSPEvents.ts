@@ -1,4 +1,3 @@
-import { EventEmitter } from "events";
 import SSPCommands from "./SSPCommands";
 import { SSPType } from "./types";
 
@@ -177,35 +176,32 @@ export const getErrorMessageFromErrorCode = (
   }
 };
 
-export const emitEventFromBuffer = <Type extends SSPType>(
+export const getEventFromBuffer = <Type extends SSPType>(
   buffer: Buffer,
-  emit: EventEmitter["emit"],
   commands: SSPCommands<Type>,
-) => {
+  // tslint:disable-next-line: no-any
+): [string, ...any[]] => {
   if (buffer[0] !== 0x7f) {
-    emit("unregistered_data", buffer);
-    return;
+    return ["unregistered_data", buffer];
   }
   const buf = buffer.toJSON();
   const data: number[] = buf.data.slice(3, buffer[2] + 3);
   const crc = commands.crc16(data.slice(1, data[2] + 3));
   if (data[data.length - 2] !== crc[0] && data[data.length - 1] !== crc[1]) {
-    emit("error", new Error("Wrong CRC from validator"), buffer, crc);
-    return;
+    return ["error", new Error("Wrong CRC from validator"), buffer, crc];
   }
   const errorCode = data[0];
   const errorMessage = getErrorMessageFromErrorCode(errorCode);
   if (errorMessage) {
-    emit("error", new Error(errorMessage), buffer);
-    return;
+    return ["error", new Error(errorMessage), buffer];
   }
   if (data.length < 2) {
-    return;
+    throw new Error("Incorrect data length");
   }
 
   const eventCode = data[1];
   const eventData = data[2];
   const event = getEventFromEventCode(eventCode, eventData, commands);
 
-  emit(event[0], event[1]);
+  return [event[0], event[1]];
 };

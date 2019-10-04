@@ -148,7 +148,8 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
       const len = buffer[2] + 5;
       const buf = Buffer.alloc(len);
       buffer.copy(buf, 0, ix, ix + len);
-      emitEventFromBuffer(buf, this.emit, this.commands);
+      const eventToEmit = getEventFromBuffer(buf, this.commands);
+      this.emit(...eventToEmit);
       ix += len;
     } while (ix < buffer.length);
   };

@@ -1,8 +1,7 @@
 import { EventEmitter } from "events";
 import Serialport from "serialport";
-import { promisify } from "util";
 import SSPCommands from "./SSPCommands";
-import { emitEventFromBuffer } from "./SSPEvents";
+import { getEventFromBuffer } from "./SSPEvents";
 import { SSPOptions, SSPType } from "./types";
 import { sleep } from "./utils";
 
@@ -84,6 +83,7 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
       dataBits: this.options.dataBits,
       stopBits: this.options.stopbits,
       parity: this.options.parity,
+      autoOpen: false,
     });
     this.commands = new SSPCommands(
       this.socket,
@@ -98,7 +98,7 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
       this.emit("error", err);
     });
     this.socket.on("data", this.handleData);
-    await promisify(this.socket.open)();
+    this.socket.open();
     const low = this.options.currencies.reduce((p, c, i) => {
       return c === 1 ? p + Math.pow(2, i) : p;
     }, 0);
@@ -120,7 +120,7 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
     if (this.isEnabled()) {
       await this.disable();
     }
-    await promisify(this.socket.close)();
+    this.socket.close();
     this.socket = undefined;
     this.emit("close");
   }

@@ -1,5 +1,4 @@
 import serialport from "serialport";
-import { promisify } from "util";
 import commands from "./commands";
 import { SSPType } from "./types";
 import { sleep } from "./utils";
@@ -32,9 +31,27 @@ class SSPCommands<Type extends SSPType> {
     if (!execLine) {
       return;
     }
-    const writeAsync = promisify(this.socket.write);
+    const writeAsync = (command: number[]) =>
+      new Promise((resolve, reject) => {
+        this.socket.write(command, (err, bytesWritten) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve(bytesWritten);
+        });
+      });
     await writeAsync(execLine);
-    const drainAsync = promisify(this.socket.drain);
+    const drainAsync = () =>
+      new Promise((resolve, reject) => {
+        this.socket.drain((err) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve();
+        });
+      });
     await drainAsync();
     await sleep(100);
     void this.exec();

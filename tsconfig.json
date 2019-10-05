@@ -4,17 +4,18 @@
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
+    "declaration": true,
     "sourceMap": true,
     "strict": true,
     "module": "commonjs",
-    "jsx": "react",
     "target": "es2017",
-    "lib": ["es2017", "dom"],
+    "esModuleInterop": true,
+    "lib": ["es2017"],
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"]
     },
-    "typeRoots": ["node_modules/@types", "./definitions"]
+    "typeRoots": ["node_modules/@types", "./@types"]
   },
-  "include": ["definitions/**/*.d.ts", "src/**/*", "__tests__/**/*"]
+  "include": ["src/**/*", "__tests__/**/*"]
 }

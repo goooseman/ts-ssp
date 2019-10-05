@@ -1,0 +1,9 @@
+jobs:
+  test:
+    name: Runs tslint and tsc
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "10.15"
+      - run: npm install
+      - run: npm run lint

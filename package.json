@@ -54,7 +54,6 @@
   "devDependencies": {
     "@types/jest": "^24.0.0",
     "@types/node": "^10.14.17",
-    "@types/serialport": "^7.0.4",
     "jest": "^24.0.0",
     "prettier-config-trucknet-io": "^2.0.1",
     "rimraf": "^3.0.0",
@@ -66,6 +65,7 @@
     "typescript": "^3.6.2"
   },
   "dependencies": {
+    "@types/serialport": "^7.0.4",
     "serialport": "^7.1.5"
   }
 }

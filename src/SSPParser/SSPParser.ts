@@ -26,16 +26,21 @@ class SSPParser extends Transform {
 
   // tslint:disable-next-line: function-name
   public _transform(chunk: Buffer, encoding: string, cb: TransformCallback) {
-    this.data = chunk;
+    this.data = Buffer.from([...this.data, ...chunk]);
     const firstByteIndex = this.data.indexOf(STX);
     if (firstByteIndex === -1) {
+      cb();
       return;
     }
     const lengthByteIndex = firstByteIndex + 2;
     const lengthByte = this.data[lengthByteIndex];
+    if (lengthByte === undefined) {
+      cb();
+      return;
+    }
     const length = lengthByte + 3; // + STX, CRCL, CRCH
-
-    if (chunk.length < length) {
+    if (this.data.length < length) {
+      cb();
       return;
     }
     this.push(this.data.slice(firstByteIndex, length));

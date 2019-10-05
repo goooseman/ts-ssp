@@ -18,3 +18,15 @@ it("should return input as it if correct message is sent in one batch", () => {
   expect(spy).toBeCalledTimes(1);
   expect(spy).toBeCalledWith(data);
 });
+
+it("should return one message, when it was transmitted in several batches", () => {
+  const spy = jest.fn();
+  const parser = new SSPParser();
+  parser.on("data", spy);
+  for (const part of event) {
+    const data = Buffer.from([part]);
+    parser.write(data);
+  }
+  expect(spy).toBeCalledTimes(1);
+  expect(spy).toBeCalledWith(Buffer.from(event));
+});

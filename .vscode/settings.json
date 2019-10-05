@@ -11,5 +11,6 @@
   "debug.node.autoAttach": "on",
   "jest.debugCodeLens.showWhenTestStateIn": ["fail", "unknown", "pass", "skip"],
   "jest.pathToJest": "npx jest --coverage",
-  "jest.showCoverageOnLoad": true
+  "jest.showCoverageOnLoad": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -1,0 +1,20 @@
+import SSPParser from "./SSPParser";
+
+const STX = 0x7f;
+const SEQ = 0x10; // Random
+const LENGTH = 0x5;
+const DATA = [0xf, 0xf, 0xf];
+const CRCL = 0;
+const CRCH = 0;
+
+const event = [STX, SEQ, LENGTH, ...DATA, CRCL, CRCH];
+
+it("should return input as it if correct message is sent in one batch", () => {
+  const data = Buffer.from(event);
+  const spy = jest.fn();
+  const parser = new SSPParser();
+  parser.on("data", spy);
+  parser.write(data);
+  expect(spy).toBeCalledTimes(1);
+  expect(spy).toBeCalledWith(data);
+});

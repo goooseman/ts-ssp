@@ -2,7 +2,7 @@ import SSPParser from "./SSPParser";
 
 const STX = 0x7f;
 const SEQ = 0x10; // Random
-const LENGTH = 0x5;
+const LENGTH = 0x3; // Without STX, SEQ, CRC, LENGTH
 const DATA = [0xf, 0xf, 0xf];
 const CRCL = 0;
 const CRCH = 0;
@@ -65,5 +65,15 @@ it("should return two message, when three extra bytes were sent in the start", (
     parser.write(data);
   }
   expect(spy).toBeCalledTimes(2);
+  expect(spy).toBeCalledWith(Buffer.from(event));
+});
+
+it("should return threee message, when they were sent in one chunk", () => {
+  const data = Buffer.from([...event, ...event, ...event]);
+  const spy = jest.fn();
+  const parser = new SSPParser();
+  parser.on("data", spy);
+  parser.write(data);
+  expect(spy).toBeCalledTimes(3);
   expect(spy).toBeCalledWith(Buffer.from(event));
 });

@@ -1,6 +1,7 @@
 import { Transform, TransformCallback } from "stream";
 
 const STX = 0x7f;
+const emptyBuffer = Buffer.alloc(0);
 
 /**
  * A transform stream that parses SSP event messages.
@@ -14,13 +15,13 @@ class SSPParser extends Transform {
 
   constructor() {
     super();
-    this.data = Buffer.alloc(0);
+    this.data = emptyBuffer;
   }
 
   // tslint:disable-next-line: function-name
   public _flush(cb: TransformCallback) {
     this.push(this.data);
-    this.data = Buffer.alloc(0);
+    this.resetData();
     cb();
   }
 
@@ -29,6 +30,7 @@ class SSPParser extends Transform {
     this.data = Buffer.from([...this.data, ...chunk]);
     const firstByteIndex = this.data.indexOf(STX);
     if (firstByteIndex === -1) {
+      this.resetData();
       cb();
       return;
     }
@@ -44,8 +46,12 @@ class SSPParser extends Transform {
       return;
     }
     this.push(this.data.slice(firstByteIndex, length));
-    this.data = Buffer.alloc(0);
+    this.resetData();
     cb();
+  }
+
+  private resetData() {
+    this.data = emptyBuffer;
   }
 }
 

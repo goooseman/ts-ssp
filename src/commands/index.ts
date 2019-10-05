@@ -1,4 +1,4 @@
-import { SSPType } from "@src/types";
+import { SSPType } from "src/types";
 import NV10USBCommands from "./NV10USBCommands";
 import NV9USBCommands from "./NV9USBCommands";
 

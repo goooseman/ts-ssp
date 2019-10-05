@@ -2,8 +2,6 @@
 
 > NodeJS library to work with coin and bill acceptors under SSP protocol. Based on the [work](https://github.com/soulman-is-good/node-ssp) by [soulman-is-good](https://github.com/soulman-is-good).
 
-**Warning!** Library is not yet tested and published.
-
 ### Supported devices
 
 - NV10
@@ -37,3 +35,13 @@ You are always welcome to add implementation to another device. Theoritically, y
 ### Examples
 
 - [Basic example with ILS](./examples/ils-default.ts) (`npm run examples:ils-default` to run it)
+
+### TODO
+
+There are a lot of things we need to finish to make this project great again:
+
+- Add support of more devices
+- Add support of encrypted layer
+- Write some tests and refactoring
+
+Contributions are always welcome!

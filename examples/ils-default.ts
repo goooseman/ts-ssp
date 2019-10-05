@@ -26,8 +26,8 @@ const start = async () => {
   ssp.on("read_note", async (note: number) => {
     if (note > 0) {
       console.log("Ohhh, some cash!", notes[note]);
-      if (note === 3) {
-        // suddenly we decided that we don't need 100 ILS
+      if (note === 2) {
+        // suddenly we decided that we don't need 50 ILS
         await ssp.exec("reject_banknote");
       }
     }

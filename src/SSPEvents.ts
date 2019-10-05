@@ -180,15 +180,29 @@ export const getEventFromBuffer = <Type extends SSPType>(
   buffer: Buffer,
   commands: SSPCommands<Type>,
   // tslint:disable-next-line: no-any
-): [string, ...any[]] => {
-  if (buffer[0] !== 0x7f) {
+): [string, ...any[]] | undefined => {
+  /**
+   * Single byte indicating the start of a message ­ 0x7F hex
+   */
+  const STX = 0x7f;
+
+  if (buffer[0] !== STX) {
+    console.warn("unregistered message", buffer);
     return ["unregistered_data", buffer];
   }
-  const buf = buffer.toJSON();
-  const data: number[] = buf.data.slice(3, buffer[2] + 3);
-  const crc = commands.crc16(data.slice(1, data[2] + 3));
-  if (data[data.length - 2] !== crc[0] && data[data.length - 1] !== crc[1]) {
-    return ["error", new Error("Wrong CRC from validator"), buffer, crc];
+
+  const dataLength = buffer[2] + 3;
+  const startDataIndex = 3;
+  const data: Buffer = buffer.slice(startDataIndex, dataLength);
+  const crcFromBuffer = buffer.slice(buffer.length - 2, buffer.length);
+  const crcCalculated = commands.crc16(buffer.slice(1, dataLength));
+  if (!crcFromBuffer.equals(Buffer.from(crcCalculated))) {
+    return [
+      "error",
+      new Error("Wrong CRC from validator"),
+      crcFromBuffer,
+      crcCalculated,
+    ];
   }
   const errorCode = data[0];
   const errorMessage = getErrorMessageFromErrorCode(errorCode);
@@ -196,12 +210,16 @@ export const getEventFromBuffer = <Type extends SSPType>(
     return ["error", new Error(errorMessage), buffer];
   }
   if (data.length < 2) {
-    throw new Error("Incorrect data length");
+    return;
   }
 
   const eventCode = data[1];
   const eventData = data[2];
-  const event = getEventFromEventCode(eventCode, eventData, commands);
+  const [commandName, commandData] = getEventFromEventCode(
+    eventCode,
+    eventData,
+    commands,
+  );
 
-  return [event[0], event[1]];
+  return [commandName, commandData];
 };

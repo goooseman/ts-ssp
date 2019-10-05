@@ -2,6 +2,7 @@ import { EventEmitter } from "events";
 import Serialport from "serialport";
 import SSPCommands from "./SSPCommands";
 import { getEventFromBuffer } from "./SSPEvents";
+import SSPParser from "./SSPParser/SSPParser";
 import { SSPOptions, SSPType } from "./types";
 import { sleep } from "./utils";
 
@@ -101,13 +102,14 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
       this.options.sspID,
       this.options.sequence,
     );
+    const parser = this.socket.pipe(new SSPParser());
     this.socket.on("close", () => {
       this.emit("close");
     });
     this.socket.on("error", (err: Error) => {
       this.emit("error", err);
     });
-    this.socket.on("data", this.handleData);
+    parser.on("data", this.handleData);
     this.socket.open();
     const low = this.options.currencies.reduce((p, c, i) => {
       return c === 1 ? p + Math.pow(2, i) : p;
@@ -143,15 +145,15 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
       this.emit("error", new Error("Commands are not initialized"));
       return;
     }
-    let ix = 0;
-    do {
-      const len = buffer[2] + 5;
-      const buf = Buffer.alloc(len);
-      buffer.copy(buf, 0, ix, ix + len);
-      const eventToEmit = getEventFromBuffer(buf, this.commands);
+    try {
+      const eventToEmit = getEventFromBuffer(buffer, this.commands);
+      if (!eventToEmit) {
+        return;
+      }
       this.emit(...eventToEmit);
-      ix += len;
-    } while (ix < buffer.length);
+    } catch (e) {
+      console.error(e);
+    }
   };
 }
 

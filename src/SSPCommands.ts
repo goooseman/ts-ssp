@@ -57,7 +57,7 @@ class SSPCommands<Type extends SSPType> {
     void this.exec();
   }
 
-  public crc16(commandLine: number[]) {
+  public crc16(commandLine: number[] | Buffer) {
     const seed = 0xffff;
     const poly = 0x8005;
     let crc = seed;

@@ -30,3 +30,19 @@ it("should return one message, when it was transmitted in several batches", () =
   expect(spy).toBeCalledTimes(1);
   expect(spy).toBeCalledWith(Buffer.from(event));
 });
+
+it("should return two message, when it was transmitted in several batches", () => {
+  const spy = jest.fn();
+  const parser = new SSPParser();
+  parser.on("data", spy);
+  for (const part of event) {
+    const data = Buffer.from([part]);
+    parser.write(data);
+  }
+  for (const part of event) {
+    const data = Buffer.from([part]);
+    parser.write(data);
+  }
+  expect(spy).toBeCalledTimes(2);
+  expect(spy).toBeCalledWith(Buffer.from(event));
+});

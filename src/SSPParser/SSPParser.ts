@@ -44,6 +44,7 @@ class SSPParser extends Transform {
       return;
     }
     this.push(this.data.slice(firstByteIndex, length));
+    this.data = Buffer.alloc(0);
     cb();
   }
 }

@@ -110,7 +110,7 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
       this.emit("error", err);
     });
     parser.on("data", this.handleData);
-    const openAsync = (socket: SerialPort) =>
+    const openAsync = (socket: Serialport) =>
       new Promise((resolve, reject) => {
         socket.open((err?: Error | null) => {
           if (err) {
@@ -143,7 +143,7 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
     if (this.isEnabled()) {
       await this.disable();
     }
-    const closeAsync = (socket: SerialPort) =>
+    const closeAsync = (socket: Serialport) =>
       new Promise((resolve, reject) => {
         socket.close((err?: Error | null) => {
           if (err) {

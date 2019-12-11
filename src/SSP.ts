@@ -110,7 +110,18 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
       this.emit("error", err);
     });
     parser.on("data", this.handleData);
-    this.socket.open();
+    const openAsync = (socket: SerialPort) =>
+      new Promise((resolve, reject) => {
+        socket.open((err?: Error | null) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve();
+          return;
+        });
+      });
+    await openAsync(this.socket);
     const low = this.options.currencies.reduce((p, c, i) => {
       return c === 1 ? p + Math.pow(2, i) : p;
     }, 0);
@@ -132,7 +143,18 @@ class SSP<Type extends SSPType = "nv10usb"> extends EventEmitter {
     if (this.isEnabled()) {
       await this.disable();
     }
-    this.socket.close();
+    const closeAsync = (socket: SerialPort) =>
+      new Promise((resolve, reject) => {
+        socket.close((err?: Error | null) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve();
+          return;
+        });
+      });
+    await closeAsync(this.socket);
     this.socket = undefined;
     this.emit("close");
   }

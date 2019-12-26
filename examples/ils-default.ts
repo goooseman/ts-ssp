@@ -13,8 +13,8 @@ const start = async () => {
   } as const;
 
   const ssp = new SSP("nv10usb", {
-    device: "/dev/tty.SLAB_USBtoUART", //device address, use 'npx @serialport/list' to get a list
-    currencies: [0, 1, 1, 1], //currencies types acceptable. Here all but 20ILS
+    device: "/dev/ttyUSB0", // device address, use 'npx @serialport/list' to get a list
+    currencies: [1, 1, 1, 1], // currencies types acceptable
   });
 
   console.log("before open");

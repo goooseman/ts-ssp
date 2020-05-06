@@ -13,8 +13,8 @@ const start = async () => {
   } as const;
 
   const ssp = new SSP("nv10usb", {
-    device: "/dev/tty.SLAB_USBtoUART", //device address, use 'npx @serialport/list' to get a list
-    currencies: [0, 1, 1, 1], //currencies types acceptable. Here all but 20ILS
+    device: "/dev/ttyUSB0", // device address, use 'npx @serialport/list' to get a list
+    currencies: [1, 1, 1, 1], // currencies types acceptable
   });
 
   console.log("before open");
@@ -26,7 +26,11 @@ const start = async () => {
   ssp.on("read_note", async (note: number) => {
     if (note > 0) {
       console.log("Ohhh, some cash!", notes[note]);
-      if (note === 2) {
+      /**
+       * Change it to true to test banknote rejection
+       */
+      const isReject50 = false;
+      if (isReject50 && note === 2) {
         // suddenly we decided that we don't need 50 ILS
         await ssp.exec("reject_banknote");
       }

@@ -65,7 +65,7 @@
     "typescript": "^3.6.2"
   },
   "dependencies": {
-    "@types/serialport": "^7.0.4",
-    "serialport": "^7.1.5"
+    "@types/serialport": "^8.0.0",
+    "serialport": "^8.0.0"
   }
 }
